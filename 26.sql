@@ -10,4 +10,4 @@ WHERE type='printer'
                                 WHERE pc.ram=(Select MAX(ram) 
                                               FROM pc)
                                 )
-                )   /*  Select ram FROM PC p WHERE p.ram = (SELECT MIN(ram) FROM PC) AND SELECT speed FROM PC p WHERE p.speed = (SELECT MAX(speed) FROM PC)*/
+                )
