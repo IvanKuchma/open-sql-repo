@@ -1,13 +1,22 @@
-SELECT maker 
-FROM Product p 
-WHERE type='printer' 
- AND p.maker IN(SELECT maker 
-                from product,pc 
-                WHERE pc.ram = (SELECT MIN(ram) 
-                                FROM pc)
-                AND pc.speed = (SELECT MAX(speed) 
-                                FROM PC 
-                                WHERE pc.ram=(Select MAX(ram) 
-                                              FROM pc)
-                                )
-                )
+with tab as
+(Select model,speed
+ From PC
+ where pc.ram = (Select MIN(ram) From PC )),
+tab2 as (
+Select pc.model, pc.ram
+from tab, pc
+where tab.speed = (Select MAX(speed) 
+                   From tab ) 
+                   and tab.model = pc.model),
+tab3 as (
+select model
+from tab2
+Where tab2.ram = (SELECT MIN(ram) 
+                  From tab2 ) )
+SELECT distinct maker
+From product,tab3 
+where product.model = tab3.model
+INTERSECT
+SELECT distinct maker
+From product,tab3
+where type='printer'
